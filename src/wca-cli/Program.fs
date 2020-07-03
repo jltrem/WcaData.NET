@@ -8,13 +8,15 @@ open Argu
 [<CliPrefix(CliPrefix.DoubleDash)>]
 [<NoAppSettings>]
 type WcaArguments =
-    | User of user:string
+    | User of wcaId:string
+    | Person of wcaId:string
     | Records
 
     interface IArgParserTemplate with
         member s.Usage =
             match s with
             | User _ -> "get user by WCA id"
+            | Person _ -> "get person by WCA id"
             | Records _ -> "get world records"
 
  
@@ -47,6 +49,7 @@ let main argv =
 
     match parser.ParseCommandLine argv with
     | id when id.Contains(User) -> id.GetResult(User) |> getUser |> printfn "%A"
+    | id when id.Contains(Person) -> id.GetResult(Person) |> getPerson |> printfn "%A"
     | x when x.Contains(Records) -> getRecords |> printfn "%A"
     | _ -> printfn "%s" (parser.PrintUsage())
 
