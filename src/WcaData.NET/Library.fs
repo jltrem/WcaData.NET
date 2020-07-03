@@ -1,14 +1,13 @@
-﻿namespace WcaData.NET
+﻿module WcaData.NET
 
-open FSharp.Data
+open WcaData.ApiTypes
+open Newtonsoft.Json
 
-module GET =
 
-    let baseUrl = "https://worldcubeassociation.org/api/v0/"
+let getUser id = 
+    WcaData.Api.getUser id
+    |> Async.RunSynchronously
+    |> JsonConvert.DeserializeObject<GetUser> 
+    |> fun x -> x.user
 
-    let user id =
 
-        async { 
-            let! json = Http.AsyncRequestString(baseUrl + "users/" + id)
-            return json 
-        }
